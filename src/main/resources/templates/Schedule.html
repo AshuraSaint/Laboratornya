@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{schedule.title}">Расписание</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 th:text="#{schedule.title}" class="mb-4">Расписание</h1>
+    <div class="card card-body bg-light">
+        <div class="mb-3">
+            <form action="/logout" method="post">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                <button type="submit" class="btn btn-danger" th:text="#{logout}">Выйти</button>
+            </form>
+        </div>
+        <form action="/save" method="post" th:object="${schedule}">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+            <div class="form-group">
+                <label for="id" th:text="#{id.label}">ИД:</label>
+                <input type="text" class="form-control" id="id" name="id" th:value="*{id}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="courseName" th:text="#{course.name.label}">Название курса:</label>
+                <input type="text" class="form-control" id="courseName" name="courseName" th:value="*{courseName}" required>
+            </div>
+            <div class="form-group">
+                <label for="dayOfWeek" th:text="#{day.of.week.label}">День недели:</label>
+                <input type="text" class="form-control" id="dayOfWeek" name="dayOfWeek" th:value="*{dayOfWeek}" required>
+            </div>
+            <div class="form-group">
+                <label for="time" th:text="#{time.label}">Время:</label>
+                <input type="text" class="form-control" id="time" name="time" th:value="*{time}" required>
+            </div>
+            <div class="form-group">
+                <label for="teacher" th:text="#{teacher.label}">Преподаватель:</label>
+                <input type="text" class="form-control" id="teacher" name="teacher" th:value="*{teacher}" required>
+            </div>
+            <button type="submit" class="btn btn-primary" th:text="#{submit}">Отправить</button>
+        </form>
+    </div>
+    <div class="mt-5">
+        <h2 th:text="#{scheduled.courses}">Запланированные курсы</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th th:text="#{id}">ИД</th>
+                <th th:text="#{course.name}">Название курса</th>
+                <th th:text="#{day}">День недели</th>
+                <th th:text="#{time}">Время</th>
+                <th th:text="#{teacher}">Преподаватель</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="schedule : ${schedules}">
+                <td th:text="${schedule.id}">1</td>
+                <td th:text="${schedule.courseName}">Программирование</td>
+                <td th:text="${schedule.dayOfWeek}">Понедельник</td>
+                <td th:text="${schedule.time}">10:00</td>
+                <td th:text="${schedule.teacher}">Иванов И.И.</td>
+                <td>
+                    <a th:href="@{'/edit/' + ${schedule.id}}" class="btn btn-success" th:text="#{edit}">Редактировать</a>
+                    <a th:href="@{'/delete/' + ${schedule.id}}" class="btn btn-danger" th:text="#{delete}">Удалить</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
